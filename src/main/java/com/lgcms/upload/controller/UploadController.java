@@ -19,9 +19,9 @@ public class UploadController {
     private final LectureUploadService lectureUploadService;
 
     @PostMapping("/lecture")
-    public ResponseEntity<BaseResponse<LectureUploadResponse>> uploadOriginFiles(
-            @RequestPart(name = "files") List<MultipartFile> files,
-            @RequestPart(name = "id", required = false) String lectureId,
+    public ResponseEntity<BaseResponse> uploadOriginFiles(
+            @RequestParam(name = "files") List<MultipartFile> files,
+            @RequestParam(name = "id", required = false) String lectureId,
             @RequestHeader("X-USER-ID") String memberId) {
 
             lectureUploadService.uploadFiles(files, lectureId);
