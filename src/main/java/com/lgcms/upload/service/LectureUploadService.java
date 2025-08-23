@@ -39,7 +39,7 @@ public class LectureUploadService {
                 metadata.setContentLength(file.getSize());
                 metadata.setContentType(file.getContentType());
 
-//                amazonS3.putObject(bucket, key, file.getInputStream(), metadata);
+                amazonS3.putObject(bucket, key, file.getInputStream(), metadata);
 
                 if ("application/pdf".equalsIgnoreCase(file.getContentType())) {
                     lectureUploadDto.setBookKey(prefix + key);   // 교안
