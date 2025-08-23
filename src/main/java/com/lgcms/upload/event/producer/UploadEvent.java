@@ -7,6 +7,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -15,11 +16,14 @@ public class UploadEvent {
 
     public void lectureUploadEvent(LectureUploadDto lectureUploadDto) {
         KafkaEvent kafkaEvent = KafkaEvent.builder()
-                .eventId("업로드1")
+                .eventId("backend-upload"+ UUID.randomUUID().toString())
                 .eventTime(LocalDateTime.now().toString())
-                .eventType("강의교안 강의썸네일 업로드 완료")
+                .eventType("LECTURE_UPLOAD")
                 .data(lectureUploadDto)
                 .build();
-        kafkaTemplate.send("UPLOAD-01", kafkaEvent);
+        System.out.println(lectureUploadDto.getLectureId());
+        System.out.println(lectureUploadDto.getBookKey());
+        System.out.println(lectureUploadDto.getThumbnailKey());
+        kafkaTemplate.send("LECTURE_UPLOAD", kafkaEvent);
     }
 }

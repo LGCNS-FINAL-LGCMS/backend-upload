@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/upload")
+@RequestMapping("/lecturer/upload")
 @RequiredArgsConstructor
 public class UploadController {
 
@@ -24,7 +24,16 @@ public class UploadController {
             @RequestParam(name = "id", required = false) String lectureId,
             @RequestHeader("X-USER-ID") String memberId) {
 
-            lectureUploadService.uploadFiles(files, lectureId);
+        lectureUploadService.uploadFiles(files, lectureId);
+        return ResponseEntity.ok(BaseResponse.ok(null));
+    }
+
+    @PostMapping("/lesson")
+    public ResponseEntity<BaseResponse> uploadOriginFile(
+            @RequestParam(name = "file") MultipartFile file,
+            @RequestParam(name = "id", required = false) String lectureId,
+            @RequestHeader("X-USER-ID") String memberId){
+        lectureUploadService.uploadVideo(file, lectureId);
         return ResponseEntity.ok(BaseResponse.ok(null));
     }
 }
