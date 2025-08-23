@@ -26,3 +26,18 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         spring.json.add.type.headers: false
+
+cloud:
+  aws:
+    s3:
+      bucket: lgcms-files
+    credentials:
+      access-key: accesskey
+      secret-key: secretkey
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    cdn:
+      url: cdnurl
