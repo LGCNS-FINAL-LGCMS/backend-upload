@@ -1,8 +1,6 @@
 package com.lgcms.upload.controller;
 
 import com.lgcms.upload.common.dto.BaseResponse;
-import com.lgcms.upload.dto.request.LectureUploadRequest;
-import com.lgcms.upload.dto.response.LectureUploadResponse;
 import com.lgcms.upload.service.LectureUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +20,7 @@ public class UploadController {
     public ResponseEntity<BaseResponse> uploadOriginFiles(
             @RequestParam(name = "files") List<MultipartFile> files,
             @RequestParam(name = "id", required = false) String lectureId,
-            @RequestHeader("X-USER-ID") String memberId) {
+            @RequestHeader("X-USER-ID") Long memberId) {
 
         lectureUploadService.uploadFiles(files, lectureId);
         return ResponseEntity.ok(BaseResponse.ok(null));
@@ -31,9 +29,10 @@ public class UploadController {
     @PostMapping("/lesson")
     public ResponseEntity<BaseResponse> uploadOriginFile(
             @RequestParam(name = "file") MultipartFile file,
-            @RequestParam(name = "id", required = false) String lectureId,
-            @RequestHeader("X-USER-ID") String memberId){
-        lectureUploadService.uploadVideo(file, lectureId);
+            @RequestParam(name = "lectureId") String lectureId,
+            @RequestParam(name = "lessonId") String lessonId,
+            @RequestHeader("X-USER-ID") Long memberId){
+        lectureUploadService.uploadVideo(file, lectureId, lessonId, memberId);
         return ResponseEntity.ok(BaseResponse.ok(null));
     }
 }
