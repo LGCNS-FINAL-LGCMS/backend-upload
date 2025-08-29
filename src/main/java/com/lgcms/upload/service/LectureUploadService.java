@@ -4,7 +4,9 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.lgcms.upload.common.dto.exception.BaseException;
 import com.lgcms.upload.common.dto.exception.UploadError;
+import com.lgcms.upload.common.kafka.dto.LectureEncodeDto;
 import com.lgcms.upload.common.kafka.dto.LectureUploadDto;
+import com.lgcms.upload.event.producer.EncodeEvent;
 import com.lgcms.upload.event.producer.UploadEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ public class LectureUploadService {
 
     private final AmazonS3 amazonS3;
     private final UploadEvent uploadEvent;
+    private final EncodeEvent encodeEvent;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -54,9 +57,9 @@ public class LectureUploadService {
         }
     }
 
-    public void uploadVideo(MultipartFile file, String lectureId) {
+    public void uploadVideo(MultipartFile file, String lectureId, String lessonId, Long memberId) {
         try {
-            String key = lectureId + "/" + file.getOriginalFilename();
+            String key = lectureId + "/" +lessonId + "/" + file.getOriginalFilename();
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(file.getSize());
@@ -64,6 +67,15 @@ public class LectureUploadService {
 
             amazonS3.putObject(bucket, key, file.getInputStream(), metadata);
             System.out.println(key);
+
+            LectureEncodeDto lectureEncodeDto = LectureEncodeDto.builder()
+                    .lectureId(lectureId)
+                    .lessonId(lessonId)
+                    .memberId(memberId)
+                    .key(key)
+                    .build();
+
+            encodeEvent.LectureEncodeEvent(lectureEncodeDto);
         } catch (Exception e) {
             log.error("S3 upload failed", e);
             throw new BaseException(UploadError.UPLOAD_FAIL);

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class LectureEncodeDto {
 
     private String lectureId;
-    private String thumbnailKey;
-    private String bookKey;
+    private String lessonId;
+    private Long memberId;
+    private String key;
 }
