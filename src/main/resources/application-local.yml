@@ -39,3 +39,11 @@ cloud:
       auto: false
     cdn:
       url: ${CDN_URL}
+ management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info
+  metrics:
+    tags:
+      application: ${spring.application.name}
