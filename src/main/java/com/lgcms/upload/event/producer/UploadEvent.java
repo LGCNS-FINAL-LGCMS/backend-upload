@@ -18,12 +18,12 @@ public class UploadEvent {
         KafkaEvent kafkaEvent = KafkaEvent.builder()
                 .eventId("backend-upload"+ UUID.randomUUID().toString())
                 .eventTime(LocalDateTime.now().toString())
-                .eventType("UPLOAD_LECTURE")
+                .eventType("LECTURE_UPLOAD")
                 .data(lectureUploadDto)
                 .build();
         System.out.println(lectureUploadDto.getLectureId());
         System.out.println(lectureUploadDto.getBookKey());
         System.out.println(lectureUploadDto.getThumbnailKey());
-        kafkaTemplate.send("UPLOAD_LECTURE", kafkaEvent);
+        kafkaTemplate.send("LECTURE_UPLOAD", kafkaEvent);
     }
 }
